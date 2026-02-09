@@ -72,7 +72,7 @@
     <div id="capture-area" class="max-w-[1200px] mx-auto p-10 bg-white main-border rounded-[2.5rem]">
         
         <!-- Header -->
-        <div class="mb-10 text-center">
+        <div class="mb-6 text-center">
             <h1 class="text-4xl font-extrabold uppercase tracking-tight mb-2">Class Routine</h1>
             <p class="text-xl font-semibold uppercase">
                 19th Batch • Economics • 2nd Semester 
@@ -82,11 +82,31 @@
             <div class="w-24 h-2 bg-black mx-auto mt-4 rounded-full"></div>
         </div>
 
-        <!-- Section Toggles -->
-        <div class="flex gap-4 mb-8 no-print">
-            <button onclick="updateView('A')" id="tab-A" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-white text-black transition-colors">Section A</button>
-            <button onclick="updateView('B')" id="tab-B" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-white text-black transition-colors">Section B</button>
-            <button onclick="updateView('COMBINED')" id="tab-COMBINED" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-black text-white transition-colors">Combined (A+B)</button>
+        <!-- Section Toggles (No Print) -->
+        <div class="flex gap-4 mb-6 no-print justify-center">
+            <button onclick="updateView('A')" id="tab-A" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-white text-black transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Section A</button>
+            <button onclick="updateView('B')" id="tab-B" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-white text-black transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Section B</button>
+            <button onclick="updateView('COMBINED')" id="tab-COMBINED" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-black text-white transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">Combined (A+B)</button>
+        </div>
+
+        <!-- Legend Area (Now ABOVE the table) -->
+        <div class="mb-8 border-b-2 border-slate-100 pb-6">
+            <!-- Combined Legend (Sections) -->
+            <div id="legend-combined" class="flex justify-center gap-8 hidden">
+                <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 rounded-lg border-2 border-black bg-[#dbeafe]"></div>
+                    <span class="text-xs font-extrabold uppercase tracking-widest">Section A</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 rounded-lg border-2 border-black bg-[#ffe4e6]"></div>
+                    <span class="text-xs font-extrabold uppercase tracking-widest">Section B</span>
+                </div>
+            </div>
+
+            <!-- Section A/B Legend (Courses) -->
+            <div id="legend-courses" class="flex flex-wrap justify-center gap-x-8 gap-y-3 hidden">
+                <!-- Injected by JS -->
+            </div>
         </div>
 
         <div class="disconnected-grid" id="grid-container">
@@ -105,16 +125,7 @@
         <div class="mt-12 flex justify-between items-end">
             <div>
                 <p class="text-sm font-bold uppercase opacity-40 italic">University of Dhaka</p>
-                <div id="legend-area" class="mt-2 flex gap-4 hidden">
-                    <div class="flex items-center gap-2">
-                        <div class="w-4 h-4 rounded border border-black bg-[#dbeafe]"></div>
-                        <span class="text-[10px] font-bold uppercase">Section A</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-4 h-4 rounded border border-black bg-[#ffe4e6]"></div>
-                        <span class="text-[10px] font-bold uppercase">Section B</span>
-                    </div>
-                </div>
+                <p class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-tighter">Department of Economics</p>
             </div>
             <div class="text-right">
                 <p class="text-xs font-bold text-slate-400">Classes start: Feb 15, 2026</p>
@@ -144,10 +155,10 @@
         ];
 
         const courseDetails = {
-            "102": { name: "Macroeconomics", color: "#ffe4e6" }, 
+            "102": { name: "Principles of Macroeconomics", color: "#ffe4e6" }, 
             "104": { name: "Mathematics II", color: "#fef3c7" }, 
             "106": { name: "Statistics II", color: "#f3e8ff" }, 
-            "110": { name: "English Comp.", color: "#cffafe" }  
+            "110": { name: "English Comprehension", color: "#cffafe" }  
         };
 
         const sectionColors = {
@@ -162,7 +173,6 @@
         function updateView(section) {
             currentSection = section;
             
-            // Update Text Header Display
             const sectionDisplay = document.getElementById('active-section-display');
             if (section === 'COMBINED') {
                 sectionDisplay.innerText = "Combined (Section A + B)";
@@ -170,7 +180,6 @@
                 sectionDisplay.innerText = `Section ${section}`;
             }
 
-            // UI Toggle
             const tabs = ['A', 'B', 'COMBINED'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
@@ -183,15 +192,34 @@
                 }
             });
 
-            // Legend Visibility
-            const legend = document.getElementById('legend-area');
+            const legendCombined = document.getElementById('legend-combined');
+            const legendCourses = document.getElementById('legend-courses');
+            
             if (section === 'COMBINED') {
-                legend.classList.remove('hidden');
+                legendCombined.classList.remove('hidden');
+                legendCourses.classList.add('hidden');
             } else {
-                legend.classList.add('hidden');
+                legendCombined.classList.add('hidden');
+                legendCourses.classList.remove('hidden');
+                renderCourseLegend();
             }
 
             render();
+        }
+
+        function renderCourseLegend() {
+            const container = document.getElementById('legend-courses');
+            container.innerHTML = '';
+            Object.keys(courseDetails).forEach(id => {
+                const course = courseDetails[id];
+                const item = document.createElement('div');
+                item.className = "flex items-center gap-3";
+                item.innerHTML = `
+                    <div class="w-5 h-5 rounded border-2 border-black" style="background-color: ${course.color}"></div>
+                    <span class="text-[10px] font-extrabold uppercase tracking-tight">${id}: ${course.name}</span>
+                `;
+                container.appendChild(item);
+            });
         }
 
         function getCellColor(info) {
@@ -206,7 +234,7 @@
             return `
                 <div class="text-[12px] font-extrabold leading-none">${info.id} (${info.section})</div>
                 <div class="text-[8px] font-bold uppercase tracking-wider my-0.5 bg-white/50 px-1 rounded-full border border-black/10">R-${info.room}</div>
-                <div class="text-[8px] font-bold leading-tight text-black">${details.name}</div>
+                <div class="text-[8px] font-bold leading-tight text-black">${details.name.split(':')[0]}</div>
             `;
         }
 
@@ -241,7 +269,7 @@
                             <div class="flex flex-col items-center justify-center text-center p-2">
                                 <div class="text-xl font-extrabold leading-none">${info.id}</div>
                                 <div class="text-[10px] font-bold uppercase tracking-wider my-1.5 bg-white/50 px-2 rounded-full border border-black/10">ROOM ${info.room}</div>
-                                <div class="text-[10px] font-bold leading-tight text-black">${details.name}</div>
+                                <div class="text-[10px] font-bold leading-tight text-black">${details.name.split(':')[0]}</div>
                                 ${currentSection === 'COMBINED' ? `<div class="text-[9px] font-black mt-1 text-black/60 italic">SECTION ${info.section}</div>` : ''}
                             </div>
                         `;
@@ -289,7 +317,7 @@
             link.click();
         }
 
-        window.onload = render;
+        window.onload = () => updateView('COMBINED');
     </script>
 </body>
 </html>

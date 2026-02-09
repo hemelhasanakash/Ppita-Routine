@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Routine - 19th Batch Economics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+        }
+        .main-border {
+            border: 4px solid #000000;
+        }
+        .cell-border {
+            border: 3px solid #000000;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: white !important; padding: 0 !important; }
+            .main-border { border-width: 4px !important; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        }
+        .time-label {
+            font-weight: 800;
+            color: #000000;
+        }
+        .disconnected-grid {
+            display: grid;
+            grid-template-columns: 140px repeat(5, 1fr);
+            gap: 1rem;
+        }
+        /* Split cell styling */
+        .split-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        .split-half {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2px 4px;
+        }
+        .split-divider {
+            height: 2px;
+            background-color: #000;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <!-- Actions -->
+    <div class="max-w-[1200px] mx-auto mb-8 flex gap-4 no-print justify-end">
+        <button onclick="downloadPNG()" class="bg-black text-white px-6 py-3 rounded-full font-bold hover:bg-gray-800 transition-all flex items-center gap-2">
+            Save as PNG
+        </button>
+        <button onclick="window.print()" class="bg-white text-black border-2 border-black px-6 py-3 rounded-full font-bold hover:bg-gray-100 transition-all">
+            Print PDF
+        </button>
+    </div>
+
+    <!-- Capture Area -->
+    <div id="capture-area" class="max-w-[1200px] mx-auto p-10 bg-white main-border rounded-[2.5rem]">
+        
+        <!-- Header -->
+        <div class="mb-10 text-center">
+            <h1 class="text-4xl font-extrabold uppercase tracking-tight mb-2">Class Routine</h1>
+            <p class="text-xl font-semibold uppercase">
+                19th Batch • Economics • 2nd Semester 
+                <br>
+                <span id="active-section-display" class="text-black bg-yellow-300 px-4 py-1 rounded-lg mt-2 inline-block">Combined (Section A + B)</span>
+            </p>
+            <div class="w-24 h-2 bg-black mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <!-- Section Toggles -->
+        <div class="flex gap-4 mb-8 no-print">
+            <button onclick="updateView('A')" id="tab-A" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-white text-black transition-colors">Section A</button>
+            <button onclick="updateView('B')" id="tab-B" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-white text-black transition-colors">Section B</button>
+            <button onclick="updateView('COMBINED')" id="tab-COMBINED" class="px-6 py-2 rounded-xl border-2 border-black font-bold bg-black text-white transition-colors">Combined (A+B)</button>
+        </div>
+
+        <div class="disconnected-grid" id="grid-container">
+            <!-- Header Row -->
+            <div class="h-10"></div> <!-- Empty top-left -->
+            <div class="text-center font-extrabold text-xl uppercase italic">Sun</div>
+            <div class="text-center font-extrabold text-xl uppercase italic">Mon</div>
+            <div class="text-center font-extrabold text-xl uppercase italic">Tue</div>
+            <div class="text-center font-extrabold text-xl uppercase italic">Wed</div>
+            <div class="text-center font-extrabold text-xl uppercase italic">Thu</div>
+
+            <!-- Rows Injected by JavaScript -->
+        </div>
+
+        <!-- Footer Info -->
+        <div class="mt-12 flex justify-between items-end">
+            <div>
+                <p class="text-sm font-bold uppercase opacity-40 italic">University of Dhaka</p>
+                <div id="legend-area" class="mt-2 flex gap-4 hidden">
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 rounded border border-black bg-[#dbeafe]"></div>
+                        <span class="text-[10px] font-bold uppercase">Section A</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 rounded border border-black bg-[#ffe4e6]"></div>
+                        <span class="text-[10px] font-bold uppercase">Section B</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-xs font-bold text-slate-400">Classes start: Feb 15, 2026</p>
+                <p class="text-[10px] font-medium text-slate-400">Created for Ppita</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const scheduleData = [
+            { day: "Sunday", time: "02:00-03:20", id: "102", room: "301", section: "B" },
+            { day: "Sunday", time: "03:30-04:50", id: "102", room: "302", section: "A" },
+            { day: "Monday", time: "09:30-10:50", id: "110", room: "4045", section: "B" },
+            { day: "Monday", time: "11:00-12:20", id: "110", room: "4045", section: "A" },
+            { day: "Monday", time: "11:00-12:20", id: "104", room: "301", section: "B" },
+            { day: "Monday", time: "12:30-01:50", id: "104", room: "301", section: "A" },
+            { day: "Monday", time: "02:00-03:20", id: "102", room: "302", section: "A" },
+            { day: "Monday", time: "03:30-04:50", id: "102", room: "301", section: "B" },
+            { day: "Tuesday", time: "02:00-03:20", id: "106", room: "303", section: "A" },
+            { day: "Tuesday", time: "03:30-04:50", id: "106", room: "303", section: "B" },
+            { day: "Wednesday", time: "09:30-10:50", id: "104", room: "303", section: "B" },
+            { day: "Wednesday", time: "11:00-12:20", id: "104", room: "303", section: "A" },
+            { day: "Thursday", time: "11:00-12:20", id: "110", room: "301", section: "A" },
+            { day: "Thursday", time: "12:30-01:50", id: "110", room: "301", section: "B" },
+            { day: "Thursday", time: "02:00-03:20", id: "106", room: "303", section: "B" },
+            { day: "Thursday", time: "03:30-04:50", id: "106", room: "301", section: "A" }
+        ];
+
+        const courseDetails = {
+            "102": { name: "Macroeconomics", color: "#ffe4e6" }, 
+            "104": { name: "Mathematics II", color: "#fef3c7" }, 
+            "106": { name: "Statistics II", color: "#f3e8ff" }, 
+            "110": { name: "English Comp.", color: "#cffafe" }  
+        };
+
+        const sectionColors = {
+            "A": "#dbeafe",
+            "B": "#ffe4e6"
+        };
+
+        const timeSlots = ["09:30-10:50", "11:00-12:20", "12:30-01:50", "02:00-03:20", "03:30-04:50"];
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
+        let currentSection = 'COMBINED';
+
+        function updateView(section) {
+            currentSection = section;
+            
+            // Update Text Header Display
+            const sectionDisplay = document.getElementById('active-section-display');
+            if (section === 'COMBINED') {
+                sectionDisplay.innerText = "Combined (Section A + B)";
+            } else {
+                sectionDisplay.innerText = `Section ${section}`;
+            }
+
+            // UI Toggle
+            const tabs = ['A', 'B', 'COMBINED'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === section) {
+                    btn.classList.add('bg-black', 'text-white');
+                    btn.classList.remove('bg-white', 'text-black');
+                } else {
+                    btn.classList.remove('bg-black', 'text-white');
+                    btn.classList.add('bg-white', 'text-black');
+                }
+            });
+
+            // Legend Visibility
+            const legend = document.getElementById('legend-area');
+            if (section === 'COMBINED') {
+                legend.classList.remove('hidden');
+            } else {
+                legend.classList.add('hidden');
+            }
+
+            render();
+        }
+
+        function getCellColor(info) {
+            if (currentSection === 'COMBINED') {
+                return sectionColors[info.section] || "#f1f5f9";
+            }
+            return courseDetails[info.id].color;
+        }
+
+        function createClassCard(info) {
+            const details = courseDetails[info.id];
+            return `
+                <div class="text-[12px] font-extrabold leading-none">${info.id} (${info.section})</div>
+                <div class="text-[8px] font-bold uppercase tracking-wider my-0.5 bg-white/50 px-1 rounded-full border border-black/10">R-${info.room}</div>
+                <div class="text-[8px] font-bold leading-tight text-black">${details.name}</div>
+            `;
+        }
+
+        function render() {
+            const container = document.getElementById('grid-container');
+            const headerItems = 6; 
+            while (container.children.length > headerItems) {
+                container.removeChild(container.lastChild);
+            }
+
+            timeSlots.forEach(slot => {
+                const timeLabel = document.createElement('div');
+                timeLabel.className = "flex items-center justify-center time-label text-lg italic";
+                timeLabel.innerText = slot;
+                container.appendChild(timeLabel);
+
+                days.forEach(day => {
+                    const matchedClasses = scheduleData.filter(item => 
+                        item.day === day && 
+                        item.time === slot && 
+                        (currentSection === 'COMBINED' || item.section === currentSection)
+                    );
+
+                    const cell = document.createElement('div');
+                    cell.className = "min-h-[120px] rounded-xl cell-border overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-slate-100 flex flex-col items-center justify-center";
+                    
+                    if (matchedClasses.length === 1) {
+                        const info = matchedClasses[0];
+                        const details = courseDetails[info.id];
+                        cell.style.backgroundColor = getCellColor(info);
+                        cell.innerHTML = `
+                            <div class="flex flex-col items-center justify-center text-center p-2">
+                                <div class="text-xl font-extrabold leading-none">${info.id}</div>
+                                <div class="text-[10px] font-bold uppercase tracking-wider my-1.5 bg-white/50 px-2 rounded-full border border-black/10">ROOM ${info.room}</div>
+                                <div class="text-[10px] font-bold leading-tight text-black">${details.name}</div>
+                                ${currentSection === 'COMBINED' ? `<div class="text-[9px] font-black mt-1 text-black/60 italic">SECTION ${info.section}</div>` : ''}
+                            </div>
+                        `;
+                    } else if (matchedClasses.length > 1) {
+                        const splitContainer = document.createElement('div');
+                        splitContainer.className = "split-container";
+                        
+                        matchedClasses.forEach((info, index) => {
+                            const half = document.createElement('div');
+                            half.className = "split-half";
+                            half.style.backgroundColor = getCellColor(info);
+                            half.innerHTML = createClassCard(info);
+                            splitContainer.appendChild(half);
+                            
+                            if (index < matchedClasses.length - 1) {
+                                const divider = document.createElement('div');
+                                divider.className = "split-divider";
+                                splitContainer.appendChild(divider);
+                            }
+                        });
+                        cell.innerHTML = '';
+                        cell.appendChild(splitContainer);
+                    } else {
+                        cell.style.border = "none";
+                        cell.className = "min-h-[120px] rounded-xl bg-slate-100 flex items-center justify-center";
+                        cell.innerHTML = `<div class="w-1.5 h-1.5 bg-slate-300 rounded-full"></div>`;
+                    }
+                    container.appendChild(cell);
+                });
+            });
+        }
+
+        async function downloadPNG() {
+            const area = document.getElementById('capture-area');
+            const canvas = await html2canvas(area, {
+                scale: 3,
+                backgroundColor: "#ffffff",
+                useCORS: true,
+                logging: false
+            });
+            
+            const link = document.createElement('a');
+            link.download = `Routine_Economics_${currentSection}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class Routine - 19th Batch Economics</title>
+    <title>Class Routine - 19th Batch Economics (Ramadan)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -116,7 +116,8 @@
 
     <div class="max-w-[1200px] mx-auto mb-4 md:mb-8 flex gap-2 md:gap-4 no-print justify-center md:justify-end">
         <button onclick="downloadPNG()" class="bg-black text-white px-4 md:px-6 py-2 md:py-3 rounded-full text-sm md:text-base font-bold hover:bg-gray-800 transition-all flex items-center gap-2">
-            Save PNG
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+            Save Screenshot
         </button>
         <button onclick="window.print()" class="bg-white text-black border-2 border-black px-4 md:px-6 py-2 md:py-3 rounded-full text-sm md:text-base font-bold hover:bg-gray-100 transition-all">
             Print PDF
@@ -127,6 +128,11 @@
         
         <div class="mb-4 md:mb-6 text-center">
             <h1 class="text-2xl md:text-4xl font-extrabold uppercase tracking-tight mb-1 md:mb-2">Class Routine</h1>
+            
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <span class="bg-green-100 text-green-800 text-[10px] md:text-xs font-black px-3 py-1 rounded-full border border-green-800 uppercase">Ramadan Schedule</span>
+            </div>
+
             <p class="text-sm md:text-xl font-semibold uppercase">
                 19th Batch • Economics • 2nd Sem
                 <br>
@@ -168,29 +174,36 @@
                 <p class="text-[8px] md:text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-tighter">Department of Economics</p>
             </div>
             <div class="text-right">
-                <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase">Classes start: Feb 15, 2026</p>
+                <p class="text-[8px] md:text-xs font-bold text-slate-400 uppercase">1 Hour Classes • Ramadan Special</p>
             </div>
         </div>
     </div>
 
     <script>
+        // Mapped Ramadan Timings:
+        // 09:30-10:50 -> 10:00-11:00
+        // 11:00-12:20 -> 11:00-12:00
+        // 12:30-01:50 -> 12:00-01:00
+        // 02:00-03:20 -> 01:30-02:30
+        // 03:30-04:50 -> 02:30-03:30
+
         const scheduleData = [
-            { day: "Sunday", time: "02:00-03:20", id: "102", room: "301", section: "B" },
-            { day: "Sunday", time: "03:30-04:50", id: "102", room: "302", section: "A" },
-            { day: "Monday", time: "09:30-10:50", id: "110", room: "4045", section: "B" },
-            { day: "Monday", time: "11:00-12:20", id: "110", room: "4045", section: "A" },
-            { day: "Monday", time: "11:00-12:20", id: "104", room: "301", section: "B" },
-            { day: "Monday", time: "12:30-01:50", id: "104", room: "301", section: "A" },
-            { day: "Monday", time: "02:00-03:20", id: "102", room: "302", section: "A" },
-            { day: "Monday", time: "03:30-04:50", id: "102", room: "301", section: "B" },
-            { day: "Tuesday", time: "02:00-03:20", id: "106", room: "303", section: "A" },
-            { day: "Tuesday", time: "03:30-04:50", id: "106", room: "303", section: "B" },
-            { day: "Wednesday", time: "09:30-10:50", id: "104", room: "303", section: "B" },
-            { day: "Wednesday", time: "11:00-12:20", id: "104", room: "303", section: "A" },
-            { day: "Thursday", time: "11:00-12:20", id: "110", room: "301", section: "A" },
-            { day: "Thursday", time: "12:30-01:50", id: "110", room: "301", section: "B" },
-            { day: "Thursday", time: "02:00-03:20", id: "106", room: "303", section: "B" },
-            { day: "Thursday", time: "03:30-04:50", id: "106", room: "301", section: "A" }
+            { day: "Sunday", time: "01:30-02:30", id: "102", room: "301", section: "B" },
+            { day: "Sunday", time: "02:30-03:30", id: "102", room: "302", section: "A" },
+            { day: "Monday", time: "10:00-11:00", id: "110", room: "4045", section: "B" },
+            { day: "Monday", time: "11:00-12:00", id: "110", room: "4045", section: "A" },
+            { day: "Monday", time: "11:00-12:00", id: "104", room: "301", section: "B" },
+            { day: "Monday", time: "12:00-01:00", id: "104", room: "301", section: "A" },
+            { day: "Monday", time: "01:30-02:30", id: "102", room: "302", section: "A" },
+            { day: "Monday", time: "02:30-03:30", id: "102", room: "301", section: "B" },
+            { day: "Tuesday", time: "01:30-02:30", id: "106", room: "303", section: "A" },
+            { day: "Tuesday", time: "02:30-03:30", id: "106", room: "303", section: "B" },
+            { day: "Wednesday", time: "10:00-11:00", id: "104", room: "303", section: "B" },
+            { day: "Wednesday", time: "11:00-12:00", id: "104", room: "303", section: "A" },
+            { day: "Thursday", time: "11:00-12:00", id: "110", room: "301", section: "A" },
+            { day: "Thursday", time: "12:00-01:00", id: "110", room: "301", section: "B" },
+            { day: "Thursday", time: "01:30-02:30", id: "106", room: "303", section: "B" },
+            { day: "Thursday", time: "02:30-03:30", id: "106", room: "301", section: "A" }
         ];
 
         const courseDetails = {
@@ -201,7 +214,7 @@
         };
 
         const sectionColors = { "A": "#dbeafe", "B": "#ffe4e6" };
-        const timeSlots = ["09:30-10:50", "11:00-12:20", "12:30-01:50", "02:00-03:20", "03:30-04:50"];
+        const timeSlots = ["10:00-11:00", "11:00-12:00", "12:00-01:00", "01:30-02:30", "02:30-03:30"];
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
         let currentSection = 'COMBINED';
 
@@ -347,10 +360,23 @@
 
         async function downloadPNG() {
             const area = document.getElementById('capture-area');
-            const canvas = await html2canvas(area, { scale: 3, backgroundColor: "#ffffff" });
-            const link = document.createElement('a');
-            link.download = `Routine_Economics_${currentSection}.png`;
-            link.href = canvas.toDataURL('image/png'); link.click();
+            
+            // Applied device-adaptive screenshot logic
+            try {
+                const canvas = await html2canvas(area, { 
+                    scale: 3, 
+                    useCORS: true, 
+                    backgroundColor: "#ffffff"
+                });
+                
+                const link = document.createElement('a');
+                link.download = `Routine_Economics_19thBatch_Ramadan.png`;
+                link.href = canvas.toDataURL('image/png'); 
+                link.click();
+            } catch (err) {
+                console.error("Screenshot failed:", err);
+                alert("Failed to generate image. Please try again.");
+            }
         }
 
         window.addEventListener('resize', render);
@@ -358,3 +384,5 @@
     </script>
 </body>
 </html>
+
+
